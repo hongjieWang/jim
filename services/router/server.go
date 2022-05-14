@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 	"github.com/jim/logger"
+	"github.com/jim/services/router/apis"
 	"github.com/jim/services/router/conf"
 	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
@@ -40,11 +41,23 @@ func RunServerStart(ctx context.Context, opts *ServerStartOptions, version strin
 		Filename: "./data/router.log",
 	})
 
-	app := iris.Default()
+	app := iris.New()
+
+	app.Use(func(ctx iris.Context) {
+		ctx.Header("Server", "Iris MongoDB/"+version)
+		ctx.Next()
+	})
 
 	app.Get("/health", func(ctx iris.Context) {
 		_, _ = ctx.WriteString("ok")
 	})
+
+	storeAPI := app.Party("/api/messageTemplate")
+	{
+		movieHandler := apis.NewMessageTemplateHandler()
+		storeAPI.Post("", movieHandler.Add)
+	}
+
 	logrus.Infof("load regions - %v", "ds")
 
 	// Start server
