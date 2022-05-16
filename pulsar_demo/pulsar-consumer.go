@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/apache/pulsar-client-go/pulsar"
 	"log"
+	"time"
 )
 
 func main() {
@@ -39,7 +40,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		} else {
-			fmt.Printf("Received message : %v \n", string(msg.Payload()))
+			fmt.Printf("Received message : %v  %s \n", string(msg.Payload()), time.Now().Format("2006-01-02 15:04:05"))
 		}
 
 		consumer.Ack(msg)
