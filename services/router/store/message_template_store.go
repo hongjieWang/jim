@@ -10,10 +10,12 @@ import (
 const collection = "message_template"
 
 var c = &mongo.Collection{}
+var (
+	Client, _ = database.Init("mongodb+srv://julywhj:XXX@cluster0.r1o1v.mongodb.net/test")
+)
 
 func init() {
-	client, _ := database.Init("mongodb+srv://julywhj:XXX@cluster0.r1o1v.mongodb.net/test")
-	c = client.Database("jim").Collection(collection)
+	c = Client.Database("jim").Collection(collection)
 }
 
 // MessageTemplate 消息模版

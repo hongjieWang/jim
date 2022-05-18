@@ -8,11 +8,16 @@ import (
 	"time"
 )
 
+const token = "eyJrZXlJZCI6InB1bHNhci13NDVqeno1MjN2Ym4iLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdWxzYXItdzQ1anp6NTIzdmJuX2ppbSJ9.i0xRiumZs5HN9-xtgp5j4WtHEbxzalqWVD1JmuVYph4"
+const topic = "pulsar-w45jzz523vbn/jim/message"
+const URL = "http://pulsar-w45jzz523vbn.tdmq.ap-bj.public.tencenttdmq.com:8080"
+
 func main() {
 	fmt.Println("Pulsar Consumer")
 	//实例化Pulsar client
 	client, err := pulsar.NewClient(pulsar.ClientOptions{
-		URL: "pulsar://110.40.141.168:6650",
+		URL:            URL,
+		Authentication: pulsar.NewAuthenticationToken(token),
 	})
 
 	if err != nil {
@@ -21,7 +26,7 @@ func main() {
 
 	//使用client对象实例化consumer
 	consumer, err := client.Subscribe(pulsar.ConsumerOptions{
-		Topic:            "my-topic",
+		Topic:            topic,
 		SubscriptionName: "sub-demo",
 		Type:             pulsar.Shared,
 	})
@@ -42,9 +47,7 @@ func main() {
 		} else {
 			fmt.Printf("Received message : %v  %s \n", string(msg.Payload()), time.Now().Format("2006-01-02 15:04:05"))
 		}
-
 		consumer.Ack(msg)
-
 	}
 
 }

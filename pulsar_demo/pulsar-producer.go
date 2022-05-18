@@ -37,7 +37,7 @@ func main() {
 
 	msg := &pulsar.ProducerMessage{
 		Payload:      []byte("Hello,This is a message from Pulsar Producer!"),
-		DeliverAfter: 30 * time.Second,
+		DeliverAfter: 10 * time.Second,
 	}
 
 	if err, _ := producer.Send(ctx, msg); err != nil {

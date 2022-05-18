@@ -58,6 +58,12 @@ func RunServerStart(ctx context.Context, opts *ServerStartOptions, version strin
 		storeAPI.Post("", movieHandler.Add)
 	}
 
+	userAPI := app.Party("/api/user")
+	{
+		userHandler := apis.NewUserSynHandler()
+		userAPI.Get("/syn", userHandler.Syn)
+	}
+
 	logrus.Infof("load regions - %v", "ds")
 
 	// Start server
