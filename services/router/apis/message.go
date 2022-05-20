@@ -1,8 +1,8 @@
 package apis
 
 import (
+	"github.com/jim/services/common"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/_examples/tutorial/mongodb/httputil"
 )
 
 type Message struct {
@@ -16,15 +16,13 @@ type Message struct {
 	UserPhones []string
 	//消息模版编号
 	TemplateNo string
-	//消息发送渠道
-	SendChannel []string
 }
 
 func (m *Message) Send(ctx iris.Context) {
 	message := new(Message)
 	err := ctx.ReadJSON(message)
 	if err != nil {
-		httputil.FailJSON(ctx, iris.StatusBadRequest, err, "Malformed request payload")
+		common.FailJSON(ctx, iris.StatusBadRequest, err, "Malformed request payload")
 		return
 	}
 	print(message)

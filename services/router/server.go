@@ -64,6 +64,13 @@ func RunServerStart(ctx context.Context, opts *ServerStartOptions, version strin
 		userAPI.Get("/syn", userHandler.Syn)
 	}
 
+	businessAPI := app.Party("/api/business")
+	{
+		businessHandler := apis.NewBusinessHandler()
+		businessAPI.Post("/create", businessHandler.Add)
+		businessAPI.Get("/get", businessHandler.Get)
+	}
+
 	logrus.Infof("load regions - %v", "ds")
 
 	// Start server

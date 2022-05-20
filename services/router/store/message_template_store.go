@@ -2,26 +2,16 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"github.com/jim/services/database"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
 )
-
-// mongodb数据表
-const collection = "message_template"
-
-var c = &mongo.Collection{}
-var (
-	Client, _ = database.Init("mongodb+srv://julywhj:XXX@cluster0.r1o1v.mongodb.net/test")
-)
-
-func init() {
-	c = Client.Database("jim").Collection(collection)
-}
 
 // MessageTemplate 消息模版
 type MessageTemplate struct {
-	TemplateNo      string
-	TemplateContent string
+	TemplateNo      string `bson:"template_no"`
+	TemplateContent string `bson:"template_content"`
+	Mode            string `bson:"mode"`
 }
 
 // MessageTemplateService 消息模版Service
@@ -47,19 +37,27 @@ func (s *messageTemplateService) GetAll(ctx context.Context) ([]MessageTemplate,
 }
 
 func (s *messageTemplateService) Create(ctx context.Context, m *MessageTemplate) error {
-	_, err := c.InsertOne(ctx, m)
+	fmt.Println(database.MessageTemplateCollection)
+	_, err := database.MessageTemplateCollection.InsertOne(ctx, m)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
+func (s *messageTemplateService) matchTemplateNo(templateNo string) bson.D {
+	filter := bson.D{{Key: "template_no", Value: templateNo}}
+	return filter
+}
+
 func (s *messageTemplateService) GetByTemplateNo(ctx context.Context, templateNo string) (MessageTemplate, error) {
-	return MessageTemplate{}, nil
+	var messageTemplate MessageTemplate
+	database.MessageTemplateCollection.FindOne(ctx, s.matchTemplateNo(templateNo)).Decode(&messageTemplate)
+	return messageTemplate, nil
 }
 
 func (s *messageTemplateService) Update(ctx context.Context, templateNo string, m MessageTemplate) error {
-	_, err := c.InsertOne(ctx, m)
+	_, err := database.MessageTemplateCollection.InsertOne(ctx, m)
 	if err != nil {
 		return err
 	}

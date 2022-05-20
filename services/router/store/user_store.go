@@ -2,17 +2,8 @@ package store
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/jim/services/database"
 )
-
-// mongodb数据表
-const userAccount = "user_account"
-
-var userAccountCollection = &mongo.Collection{}
-
-func init() {
-	userAccountCollection = Client.Database("jim").Collection(userAccount)
-}
 
 type UserAccount struct {
 	Phone string `json:"phone"`
@@ -55,7 +46,7 @@ func (user userAccountService) GetUserAccountByPhone(ctx context.Context, phone 
 	return UserAccount{}, nil
 }
 func (user userAccountService) Save(ctx context.Context, account *UserAccount) error {
-	_, err := userAccountCollection.InsertOne(ctx, account)
+	_, err := database.UserAccountCollection.InsertOne(ctx, account)
 	return err
 }
 func (user userAccountService) Update(ctx context.Context, phone string, account *UserAccount) error {

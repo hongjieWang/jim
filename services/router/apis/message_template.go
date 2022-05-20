@@ -1,9 +1,9 @@
 package apis
 
 import (
+	"github.com/jim/services/common"
 	"github.com/jim/services/router/store"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/_examples/tutorial/mongodb/httputil"
 )
 
 type MessageTemplateHandler struct {
@@ -18,12 +18,12 @@ func (h *MessageTemplateHandler) Add(ctx iris.Context) {
 	m := new(store.MessageTemplate)
 	err := ctx.ReadJSON(m)
 	if err != nil {
-		httputil.FailJSON(ctx, iris.StatusBadRequest, err, "Malformed request payload")
+		common.FailJSON(ctx, iris.StatusBadRequest, err, "Malformed request payload")
 		return
 	}
 	err = h.service.Create(nil, m)
 	if err != nil {
-		httputil.InternalServerErrorJSON(ctx, err, "Server was unable to create a movie")
+		common.InternalServerErrorJSON(ctx, err, "Server was unable to create a movie")
 		return
 	}
 	ctx.StatusCode(iris.StatusCreated)
