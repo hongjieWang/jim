@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/apache/pulsar-client-go v0.8.1
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/kataras/iris/v12 v12.1.8
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5

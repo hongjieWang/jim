@@ -1,29 +1,29 @@
 package apis
 
 import (
+	"fmt"
 	"github.com/jim/services/common"
+	"github.com/jim/services/router/store"
 	"github.com/kataras/iris/v12"
 )
 
-type Message struct {
-	//业务编号
-	BusinessNo string
-	//消息内容
-	Content string
-	//消息参数
-	Params []string
-	//消息接收用户
-	UserPhones []string
-	//消息模版编号
-	TemplateNo string
+type MessageHandler struct {
+	service store.MessageService
 }
 
-func (m *Message) Send(ctx iris.Context) {
-	message := new(Message)
+func NewMessageHandler() MessageHandler {
+	return MessageHandler{
+		service: store.InitMessageService(),
+	}
+}
+
+func (m *MessageHandler) Send(ctx iris.Context) {
+	message := new(store.Message)
 	err := ctx.ReadJSON(message)
 	if err != nil {
 		common.FailJSON(ctx, iris.StatusBadRequest, err, "Malformed request payload")
 		return
 	}
-	print(message)
+	err = m.service.Send(nil, message)
+	fmt.Println(message)
 }

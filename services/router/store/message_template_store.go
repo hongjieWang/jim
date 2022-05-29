@@ -12,6 +12,7 @@ type MessageTemplate struct {
 	TemplateNo      string `bson:"template_no"`
 	TemplateContent string `bson:"template_content"`
 	Mode            string `bson:"mode"`
+	MsgType         string `bson:"msg_type"`
 }
 
 // MessageTemplateService 消息模版Service

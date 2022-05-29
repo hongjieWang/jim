@@ -80,17 +80,14 @@ func (feishu Feishu) GetUsersByDept(deptId string) UserInfos {
 	return *userInfos
 }
 
-func (feishu Feishu) SendAlertMessage(msgType string, chatID string) error {
+func (feishu Feishu) SendAlertMessage(msgType, content string, chatID string) error {
 	var err error
 	var createResp *MessageItem
 	var createReq *CreateMessageRequest
 	switch msgType {
 	case "text":
-		content := "{\"text\":\"<at user_id=\\\"all\\\">所有人</at> 请注意，线上服务发生报警，请及时处理。 \\n服务负责人：<at user_id=\\\"ou_ba44c2d64d161c0f12d8548bef215311\\\">张三</at> \"}"
 		createReq = feishu.genCreateMessageRequest(chatID, content, msgType)
-
 	case "post":
-		content := "{\"zh_cn\":{\"title\":\"线上服务报警通知！\",\"content\":[[{\"tag\":\"at\",\"user_id\":\"all\",\"user_name\":\"所有人\"},{\"tag\":\"text\",\"text\":\"请注意，线上服务发生报警，请及时处理。\"}],[{\"tag\":\"text\",\"text\":\"服务负责人：\"},{\"tag\":\"at\",\"user_id\":\"ou_ba44c2d64d161c0f12d8548bef215311\",\"user_name\":\"张三\"}]]}}"
 		createReq = feishu.genCreateMessageRequest(chatID, content, msgType)
 	default:
 		return nil

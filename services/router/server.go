@@ -42,37 +42,36 @@ func RunServerStart(ctx context.Context, opts *ServerStartOptions, version strin
 	})
 
 	app := iris.New()
-
 	app.Use(func(ctx iris.Context) {
 		ctx.Header("Server", "Iris MongoDB/"+version)
 		ctx.Next()
 	})
-
 	app.Get("/health", func(ctx iris.Context) {
 		_, _ = ctx.WriteString("ok")
 	})
-
 	storeAPI := app.Party("/api/messageTemplate")
 	{
 		movieHandler := apis.NewMessageTemplateHandler()
 		storeAPI.Post("", movieHandler.Add)
 	}
-
 	userAPI := app.Party("/api/user")
 	{
 		userHandler := apis.NewUserSynHandler()
 		userAPI.Get("/syn", userHandler.Syn)
 	}
-
 	businessAPI := app.Party("/api/business")
 	{
 		businessHandler := apis.NewBusinessHandler()
 		businessAPI.Post("/create", businessHandler.Add)
 		businessAPI.Get("/get", businessHandler.Get)
 	}
-
+	//发送消息
+	messageAPI := app.Party("/api/send")
+	{
+		messageHandler := apis.NewMessageHandler()
+		messageAPI.Post("", messageHandler.Send)
+	}
 	logrus.Infof("load regions - %v", "ds")
-
 	// Start server
 	return app.Listen(config.Listen, iris.WithOptimizations)
 }
