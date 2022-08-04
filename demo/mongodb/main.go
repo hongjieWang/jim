@@ -23,7 +23,7 @@ const Collection = "user"
 func init() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	clientTest, _ = mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://julywhj:125846whj@cluster0.r1o1v.mongodb.net/test"))
+	clientTest, _ = mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://julywhj:XXXX@cluster0.r1o1v.mongodb.net/test"))
 }
 
 // Ping 验证mongodb链接成功
